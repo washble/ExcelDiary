@@ -5,6 +5,9 @@ let userLocale = navigator.language || navigator.userLanguage;
 dayjs.locale(userLocale);
 
 let calendarEl = document.getElementById('calendar');
+let loadingSpinnerEl = document.getElementById('loading-spinner');
+let loadingErrorMessageEl = document.getElementById('error-message');
+
 document.addEventListener('DOMContentLoaded', async function() {
     await calendarRender();
 });
@@ -77,6 +80,42 @@ let getSpreadSheetGid = (urlParams) => {
     return gid;
 }
 
+let loadingSpinnerPosition = () => {
+    loadingSpinnerEl.style.top = (calendarEl.offsetHeight * 0.5) + 'px';
+    loadingSpinnerEl.style.left = (calendarEl.offsetWidth * 0.5) + 'px';
+    loadingSpinnerEl.style.transform = 'translate(-50%, -50%)';
+}
+
+let loadingErrorMessagePosition = () => {
+    loadingErrorMessageEl.style.top = (calendarEl.offsetHeight * 0.5) + 'px';
+    loadingErrorMessageEl.style.left = (calendarEl.offsetWidth * 0.5) + 'px';
+    loadingErrorMessageEl.style.transform = 'translate(-50%, -50%)';
+}
+
+let loadingSpinning = () => {
+    // Show loading spinner
+    loadingSpinnerPosition();
+    loadingSpinnerEl.style.display = 'block';
+
+    // Hide error massage
+    loadingErrorMessageEl.style.display = 'none';
+}
+
+let loadingSuccessSpinning = () => {
+    // Hide loading spinner
+    loadingSpinnerEl.style.display = 'none';
+}
+
+let loadingErrorSpinning = () => {
+    // Hide loading spinner
+    loadingSpinnerEl.style.display = 'none';
+
+    // Show loadingErrorMessage
+    loadingErrorMessagePosition();
+    loadingErrorMessageEl.textContent = 'Failed to load. Please retry.';
+    loadingErrorMessageEl.style.display = 'block';
+}
+
 let loadCalendar = async (startDate, endDate) => {
     // Test : ?id=1KUlOegO2xx2_rYrIuPNgsuTFQnhk4ALSATyrdABSpXA&gid=1386834576
     const urlParams = new URLSearchParams(window.location.search);
@@ -100,6 +139,7 @@ let loadCalendar = async (startDate, endDate) => {
     let attempt = 0;
 
     while (attempt < maxAttempts) {
+        loadingSpinning();
         try {
             const response = await fetch(proxyUrl);
 
@@ -108,12 +148,17 @@ let loadCalendar = async (startDate, endDate) => {
             }
 
             const data = await response.json();
-            return await loadCalendarParse(data.contents.slice(47, -2)); // Return data if successfully loaded
+            const result = await loadCalendarParse(data.contents.slice(47, -2)); // Return data if successfully loaded
+
+            loadingSuccessSpinning();
+
+            return result;
         } catch (error) {
             console.error(`Attempt ${attempt + 1} failed:`, error);
 
             attempt++;
             if (attempt >= maxAttempts) {
+                loadingErrorSpinning();
                 console.error('Max attempts reached. Unable to load calendar data.');
                 return []; // Return empty array if maximum attempts are reached
             }

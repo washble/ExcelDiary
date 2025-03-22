@@ -3,9 +3,42 @@
     padding: 0;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
+    position: relative; /* Added to set relative positioning for child elements */
 }
 
 #calendar {
     max-width: 1100px;
     margin: 0 auto;
+}
+
+.fc-toolbar-title {
+    text-align: center; /* Center align the title */
+}
+
+.spinner {
+    border: 8px solid #f3f3f3; /* Background color */
+    border-top: 8px solid #3498db; /* Spinner color */
+    border-radius: 50%;
+    width: 50px; /* Spinner width */
+    height: 50px; /* Spinner height */
+    animation: spin 1s linear infinite; /* Rotation animation */
+    position: absolute; /* Set to absolute position */
+    top: 50%; /* Position from the top at 50% */
+    left: 50%; /* Position from the left at 50% */
+    transform: translate(-50%, -50%); /* Center alignment both horizontally and vertically */
+    z-index: 9999; /* Display above other elements */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#error-message {
+    position: absolute; /* Set to absolute position */
+    top: 50%; /* Position from the top at 50% */
+    left: 50%; /* Position from the left at 50% */
+    transform: translate(-50%, -50%); /* Center alignment both horizontally and vertically */
+    z-index: 9998; /* Display above other elements but below the spinner */
+    text-align: center; /* Center align the text */
 }
