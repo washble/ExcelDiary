@@ -16,7 +16,7 @@
 }
 
 /* Remove a:link's decoration */
-#calendar a:link {
+#calendar .fc-event-title {
     color : initial;
     text-decoration: none;
 }
