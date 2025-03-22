@@ -24,6 +24,7 @@ let calendarRender = async () => {
         navLinks: true, // can click day/week names to navigate views
         // editable: true,
         dayMaxEvents: true, // allow "more" link when too many events
+        displayEventTime: false, // Display event time
         locale: userLocale,   // Set language to Korean
         datesSet: async function(dateInfo) {
             // Date information when navigating to the previous or next month
