@@ -16,9 +16,9 @@ let calendarRender = async () => {
     let calendar = new FullCalendar.Calendar(calendarEl, {
         headerToolbar: {
         // left: 'prevYear,prev,next,nextYear today',
-        left: 'prev,next',
+        left: 'dayGridMonth,dayGridWeek',
         center: 'title',
-        right: 'dayGridMonth,dayGridWeek,today'
+        right: 'today,prev,next'
         //right: 'dayGridMonth,dayGridWeek,dayGridDay'
         },
         views: {
