@@ -15,6 +15,12 @@
     text-align: center; /* Center align the title */
 }
 
+/* Remove a:link's decoration */
+#calendar a:link {
+    color : initial;
+    text-decoration: none;
+}
+
 /* Changing the color of the weekend */
 .fc-col-header-cell-cushion, .fc-daygrid-day-number {
     text-decoration: none;

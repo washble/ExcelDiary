@@ -217,9 +217,10 @@ let loadCalendarParse = async (jsonString) => {
             // end: `${dayjs(ligneC2).format('YYYY-MM-DDT00:00:00')}`,
         };
 
-        if(ligneC0.includes('TRUE')) { event.backgroundColor = 'red'; }
         if(ligneC6) { event.url = ligneC6; }
 
+        // Set background color
+        event.backgroundColor = ligneC0.includes('TRUE') ? 'rgba(225, 0, 0, 0.7)' : 'rgba(55, 136, 216, 0.7)';
         event.borderColor = event.backgroundColor; // Set the border color to match the event's background color
 
         events.push(event);
