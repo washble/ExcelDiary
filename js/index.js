@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 let calendarRender = async () => {
-    let calendar = await new FullCalendar.Calendar(calendarEl, {
+    let calendar = new FullCalendar.Calendar(calendarEl, {
         headerToolbar: {
         // left: 'prevYear,prev,next,nextYear today',
         left: 'prev,next,today',
@@ -22,7 +22,7 @@ let calendarRender = async () => {
         },
         initialDate: today.format('YYYY-MM-DD'),
         navLinks: true, // can click day/week names to navigate views
-        editable: true,
+        // editable: true,
         dayMaxEvents: true, // allow "more" link when too many events
         locale: userLocale,   // Set language to Korean
         datesSet: async function(dateInfo) {
@@ -40,6 +40,27 @@ let calendarRender = async () => {
 
             window.open(info.event.url, '_blank');
             info.jsEvent.preventDefault();
+        },
+        eventDidMount: function(info) {
+            const tooltip = document.createElement('div');
+            tooltip.innerHTML = info.event.title;
+            tooltip.className = 'tooltip';
+
+            // Set the background color of the tooltip based on the event's background color
+            tooltip.style.backgroundColor = info.event.backgroundColor || 'rgba(55, 136, 216, 0.9)'; // Default value
+
+            document.body.appendChild(tooltip);
+
+            info.el.addEventListener('mouseenter', function() {
+                tooltip.style.display = 'block';
+                const rect = info.el.getBoundingClientRect();
+                tooltip.style.left = rect.left + 'px';
+                tooltip.style.top = (rect.top + rect.height + 10) + 'px'; // Position 10px below
+            });
+
+            info.el.addEventListener('mouseleave', function() {
+                tooltip.style.display = 'none';
+            });
         },
         // events: [
         //     {
@@ -186,7 +207,7 @@ let loadCalendarParse = async (jsonString) => {
         const ligneC6 = ligneC[6].f ? ligneC[6].f : ligneC[6].v;
 
         let event = {
-            title: `${ligneC5}(${ligneC3}-${ligneC4})`,
+            title: `${ligneC5} (${ligneC3}-${ligneC4})`,
             start: `${dayjs(ligneC1).format('YYYY-MM-DD')}T${ligneC3}:00`,
             end: `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:00`,
             // start: `${dayjs(ligneC1).format('YYYY-MM-DDT00:00:00')}`,
@@ -195,6 +216,8 @@ let loadCalendarParse = async (jsonString) => {
 
         if(ligneC0.includes('TRUE')) { event.backgroundColor = 'red'; }
         if(ligneC6) { event.url = ligneC6; }
+
+        event.borderColor = event.backgroundColor; // Set the border color to match the event's background color
 
         events.push(event);
     });

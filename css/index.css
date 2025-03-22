@@ -42,3 +42,19 @@
     z-index: 9998; /* Display above other elements but below the spinner */
     text-align: center; /* Center align the text */
 }
+
+.tooltip {
+    position: absolute; /* Absolute positioning */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px; /* Padding */
+    z-index: 9999; /* Z-index for stacking */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Shadow effect */
+    transition: opacity 0.2s ease; /* Smooth transition effect */
+    display: none; /* Hidden by default */
+    white-space: nowrap; /* Prevent line breaks */
+    color: #fff; /* Text color: white */
+}
+
+.fc-event:hover .tooltip {
+    display: block; /* Show tooltip on mouse over event */
+}
