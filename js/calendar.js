@@ -212,7 +212,7 @@ let loadCalendarParse = async (jsonString) => {
         let event = {
             title: `${ligneC5} (${ligneC3}-${ligneC4})`,
             start: `${dayjs(ligneC1).format('YYYY-MM-DD')}T${ligneC3}:00`,
-            end: `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:00`,
+            end: `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:01`,
             // start: `${dayjs(ligneC1).format('YYYY-MM-DDT00:00:00')}`,
             // end: `${dayjs(ligneC2).format('YYYY-MM-DDT00:00:00')}`,
         };
