@@ -16,9 +16,10 @@ let calendarRender = async () => {
     let calendar = new FullCalendar.Calendar(calendarEl, {
         headerToolbar: {
         // left: 'prevYear,prev,next,nextYear today',
-        left: 'prev,next,today',
+        left: 'prev,next',
         center: 'title',
-        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+        right: 'dayGridMonth,today'
+        //right: 'dayGridMonth,dayGridWeek,dayGridDay'
         },
         initialDate: today.format('YYYY-MM-DD'),
         navLinks: true, // can click day/week names to navigate views
