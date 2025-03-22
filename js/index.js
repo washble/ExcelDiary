@@ -24,13 +24,10 @@ let calendarRender = async () => {
         locale: userLocale,   // Set language to Korean
         datesSet: async function(dateInfo) {
             // Date information when navigating to the previous or next month
-            console.log(dateInfo)
             let startMonth = dayjs(dateInfo.startStr).format('YYYY-MM-DD');
             let endMonth = dayjs(dateInfo.endStr).format('YYYY-MM-DD');
 
             let eventsResult = await loadCalendar(startMonth, endMonth);
-            
-            console.log(`eventsResult: ${JSON.stringify(eventsResult)}`);
 
             calendar.removeAllEvents();
             calendar.addEventSource(eventsResult);
@@ -120,8 +117,6 @@ let loadCalendarParse = async (jsonString) => {
     await json.table.rows.forEach(ligne => {
         const ligneC = ligne.c;
 
-        console.log(`${JSON.stringify(ligneC)}`);
-
         const ligneC0 = ligneC[0].f ? ligneC[0].f : ligneC[0].v;
         const ligneC1 = ligneC[1].f ? ligneC[1].f : ligneC[1].v;
         const ligneC2 = ligneC[2].f ? ligneC[2].f : ligneC[2].v;
@@ -129,9 +124,6 @@ let loadCalendarParse = async (jsonString) => {
         const ligneC4 = ligneC[4].f ? ligneC[4].f : ligneC[4].v;
         const ligneC5 = ligneC[5].f ? ligneC[5].f : ligneC[5].v;
         const ligneC6 = ligneC[6].f ? ligneC[6].f : ligneC[6].v;
-
-        
-        console.log(dayjs(ligneC1, 'YYYY. M. D A HH:mm:ss').format('YYYY-MM-DDTHH:mm:ss'));
 
         let event = {
             title: `${ligneC5}(${ligneC3}-${ligneC4})`,
