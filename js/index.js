@@ -65,9 +65,24 @@ let calendarRender = async () => {
     calendar.render();
 }
 
+let getSpreadSheetId = (urlParams) => {
+    const id = urlParams.get('id');
+
+    return id;
+}
+
+let getSpreadSheetGid = (urlParams) => {
+    const gid = urlParams.get('gid');
+
+    return gid;
+}
+
 let loadCalendar = async (startDate, endDate) => {
-    const id = '1KUlOegO2xx2_rYrIuPNgsuTFQnhk4ALSATyrdABSpXA'; // Spreadsheet ID
-    const gid = '1386834576'; // Sheet GID
+    // Test : ?id=1KUlOegO2xx2_rYrIuPNgsuTFQnhk4ALSATyrdABSpXA&gid=1386834576
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = getSpreadSheetId(urlParams);
+    const gid = getSpreadSheetGid(urlParams);
+
     // Add nocache parameter to ensure fresh data is fetched each time
     // new Date().getTime() returns the current time in milliseconds,
     // generating a unique value to prevent caching.
