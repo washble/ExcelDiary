@@ -18,8 +18,24 @@ let calendarRender = async () => {
         // left: 'prevYear,prev,next,nextYear today',
         left: 'prev,next',
         center: 'title',
-        right: 'dayGridMonth,today'
+        right: 'dayGridMonth,dayGridWeek,today'
         //right: 'dayGridMonth,dayGridWeek,dayGridDay'
+        },
+        views: {
+            dayGrid: {
+                // options apply to dayGridMonth, dayGridWeek, and dayGridDay views
+                titleFormat: { year: 'numeric', month: 'short' }
+            },
+            timeGrid: {
+                // options apply to timeGridWeek and timeGridDay views
+            },
+            week: {
+                // options apply to dayGridWeek and timeGridWeek views
+                titleFormat: { year: 'numeric', month: 'short' }
+            },
+            day: {
+                // options apply to dayGridDay and timeGridDay views
+            }
         },
         initialDate: today.format('YYYY-MM-DD'),
         navLinks: true, // can click day/week names to navigate views
