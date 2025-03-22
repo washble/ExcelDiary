@@ -75,7 +75,11 @@ calendar_render = () => {
                 url: 'http://google.com/',
                 start: '2025-03-28'
             }
-        ]
+        ],
+        eventClick: function(info) {
+            window.open(info.event.url, '_blank');
+            info.jsEvent.preventDefault();
+        }
     });
 
     calendar.render();
