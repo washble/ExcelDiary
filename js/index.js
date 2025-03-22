@@ -75,9 +75,10 @@ let loadCalendar = async (startDate, endDate) => {
     // new Date().getTime() returns the current time in milliseconds,
     // generating a unique value to prevent caching.
 
-    // let desiredYear = 2025; // Set the desired year
     // const query = `SELECT * WHERE B >= DATE '${startDate}' AND B < DATE '${endDate}'`; // Assuming column B contains dates
-    const query = `SELECT * WHERE (B >= DATE '${startDate}' AND B < DATE '${endDate}') OR (C >= DATE '${startDate}' AND C < DATE '${endDate}')`;
+
+    // Checks if C is within the calendar range or if B and C encompass the calendar range.
+    const query = `SELECT * WHERE (C >= DATE '${startDate}' AND C < DATE '${endDate}') OR (B <= DATE '${startDate}' AND C >= DATE '${endDate}')`;
 
     // let url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=${gid}&nocache=${new Date().getTime()}`;
     const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq=${encodeURIComponent(query)}&gid=${gid}&nocache=${new Date().getTime()}`;
