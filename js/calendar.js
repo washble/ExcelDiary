@@ -151,7 +151,7 @@ let loadingErrorSpinning = () => {
 
     // Show loadingErrorMessage
     loadingErrorMessagePosition();
-    loadingErrorMessageEl.textContent = 'Failed to load. Please retry.';
+    loadingErrorMessageEl.innerText = 'Failed to load.\n Please retry.';
     loadingErrorMessageEl.style.display = 'block';
 }
 
