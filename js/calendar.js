@@ -120,14 +120,14 @@ let getSpreadSheetGid = (urlParams) => {
 }
 
 let loadingSpinnerPosition = () => {
-    loadingSpinnerEl.style.top = (calendarEl.offsetHeight * 0.5) + 'px';
-    loadingSpinnerEl.style.left = (calendarEl.offsetWidth * 0.5) + 'px';
+    loadingSpinnerEl.style.top = `${calendarEl.offsetHeight * 0.5}px`;
+    loadingSpinnerEl.style.left = `${calendarEl.offsetWidth * 0.5}px`;
     loadingSpinnerEl.style.transform = 'translate(-50%, -50%)';
 }
 
 let loadingErrorMessagePosition = () => {
-    loadingErrorMessageEl.style.top = (calendarEl.offsetHeight * 0.5) + 'px';
-    loadingErrorMessageEl.style.left = (calendarEl.offsetWidth * 0.5) + 'px';
+    loadingErrorMessageEl.style.top = `${calendarEl.offsetHeight * 0.5}px`;
+    loadingErrorMessageEl.style.left = `${calendarEl.offsetWidth * 0.5}px`;
     loadingErrorMessageEl.style.transform = 'translate(-50%, -50%)';
 }
 
