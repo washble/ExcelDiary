@@ -88,6 +88,7 @@
 
 #error-message {
     position: absolute; /* Set to absolute position */
+    color: red;
     top: 50%; /* Position from the top at 50% */
     left: 50%; /* Position from the left at 50% */
     transform: translate(-50%, -50%); /* Center alignment both horizontally and vertically */
