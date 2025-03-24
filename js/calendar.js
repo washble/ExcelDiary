@@ -156,7 +156,6 @@ let loadingErrorSpinning = () => {
 }
 
 let loadCalendar = async (startDate, endDate) => {
-    // Test : ?id=1KUlOegO2xx2_rYrIuPNgsuTFQnhk4ALSATyrdABSpXA&gid=1386834576
     const urlParams = new URLSearchParams(window.location.search);
     const id = getSpreadSheetId(urlParams);
     const gid = getSpreadSheetGid(urlParams);
