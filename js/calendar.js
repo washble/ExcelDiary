@@ -174,7 +174,8 @@ let loadCalendar = async (startDate, endDate) => {
 
     // let url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=${gid}&nocache=${new Date().getTime()}`;
     const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq=${encodeURIComponent(query)}&gid=${gid}&nocache=${new Date().getTime()}`;
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // AllOrigins proxy setup
+    // const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // AllOrigins proxy setup
+    const proxyUrl = `https://all-origins-eta.vercel.app/get?url=${encodeURIComponent(url)}`; // Custom AllOrigins proxy setup
     
     const maxAttempts = 5; // Maximum number of retry attempts
     let attempt = 0;
