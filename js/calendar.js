@@ -170,7 +170,7 @@ let loadCalendar = async (startDate, endDate) => {
     // Check1 : if Schedule Start Day is within the calendar range
     // Check2 : if Schedule End Day is within the calendar range 
     // Check3 : if Schedule Start and Schedule End Day encompass the calendar range.
-    const query = `SELECT * WHERE (B >= DATE '${startDate}' AND B < DATE '${endDate}') OR (C >= DATE '${startDate}' AND C < DATE '${endDate}') OR (B <= DATE '${startDate}' AND C >= DATE '${endDate}')`;
+    const query = `SELECT * WHERE (B >= DATE '${startDate}' AND B < DATE '${endDate}') OR (C >= DATE '${startDate}' AND C < DATE '${endDate}') OR (C >= DATE '${endDate}' AND B <= DATE '${startDate}')`;
 
     // let url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=${gid}&nocache=${new Date().getTime()}`;
     const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq=${encodeURIComponent(query)}&gid=${gid}&nocache=${new Date().getTime()}`;
