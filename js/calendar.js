@@ -237,6 +237,7 @@ let loadCalendarParse = async (jsonString) => {
             event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:01`;
         } else {
             event.title = `${ligneC5} (${ligneC3})`;
+            // No end time, using start time instead. 
             event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC3}:01`;
         }
 
