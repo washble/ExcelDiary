@@ -1,7 +1,7 @@
 // need dayjs
 const today = dayjs();
 
-let userLocale = navigator.language || navigator.userLanguage || 'en';
+let userLocale = navigator.language || navigator.userLanguage || 'ko';
 dayjs.locale(userLocale);
 
 let calendarEl = document.getElementById('calendar');
