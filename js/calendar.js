@@ -169,11 +169,12 @@ let loadCalendar = async (startDate, endDate) => {
     // Check1 : if Schedule Start Day is within the calendar range
     // Check2 : if Schedule End Day is within the calendar range 
     // Check3 : if Schedule Start and Schedule End Day encompass the calendar range.
-    const query = `SELECT * WHERE (B >= DATE '${startDate}' AND B < DATE '${endDate}') OR (C >= DATE '${startDate}' AND C < DATE '${endDate}') OR (B <= DATE '${startDate}' AND C >= DATE '${endDate}')`;
+    const query = `SELECT * WHERE (B >= DATE '${startDate}' AND B < DATE '${endDate}') OR (C >= DATE '${startDate}' AND C < DATE '${endDate}') OR (C >= DATE '${endDate}' AND B <= DATE '${startDate}')`;
 
     // let url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=${gid}&nocache=${new Date().getTime()}`;
     const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq=${encodeURIComponent(query)}&gid=${gid}&nocache=${new Date().getTime()}`;
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // AllOrigins proxy setup
+    // const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // AllOrigins proxy setup
+    const proxyUrl = `https://all-origins-eta.vercel.app/get?url=${encodeURIComponent(url)}`; // Custom AllOrigins proxy setup
     
     const maxAttempts = 5; // Maximum number of retry attempts
     let attempt = 0;
@@ -215,23 +216,29 @@ let loadCalendarParse = async (jsonString) => {
     let events = [];
 
     await json.table.rows.forEach(ligne => {
+        // Get ligne.c's elements
         const ligneC = ligne.c;
 
         const ligneC0 = ligneC[0].f ? ligneC[0].f : ligneC[0].v;
         const ligneC1 = ligneC[1].f ? ligneC[1].f : ligneC[1].v;
         const ligneC2 = ligneC[2].f ? ligneC[2].f : ligneC[2].v;
         const ligneC3 = ligneC[3].f ? ligneC[3].f : ligneC[3].v;
-        const ligneC4 = ligneC[4].f ? ligneC[4].f : ligneC[4].v;
+        const ligneC4 = ligneC[4] != null ? (ligneC[4].f ? ligneC[4].f : ligneC[4].v) : null;
         const ligneC5 = ligneC[5].f ? ligneC[5].f : ligneC[5].v;
         const ligneC6 = ligneC[6].f ? ligneC[6].f : ligneC[6].v;
 
-        let event = {
-            title: `${ligneC5} (${ligneC3}-${ligneC4})`,
-            start: `${dayjs(ligneC1).format('YYYY-MM-DD')}T${ligneC3}:00`,
-            end: `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:01`,
-            // start: `${dayjs(ligneC1).format('YYYY-MM-DDT00:00:00')}`,
-            // end: `${dayjs(ligneC2).format('YYYY-MM-DDT00:00:00')}`,
-        };
+        // Event settings
+        let event = {};
+
+        event.start = `${dayjs(ligneC1).format('YYYY-MM-DD')}T${ligneC3}:00`;
+        if(ligneC4 != null) {
+            event.title = `${ligneC5} (${ligneC3}-${ligneC4})`;
+            event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:01`;
+        } else {
+            event.title = `${ligneC5} (${ligneC3})`;
+            // No end time, using start time instead. 
+            event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC3}:01`;
+        }
 
         if(ligneC6) { event.url = ligneC6; }
 
