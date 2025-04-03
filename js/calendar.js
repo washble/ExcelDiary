@@ -255,8 +255,8 @@ let loadCalendarParse = async (jsonString) => {
 let dateTimeFormat = (day, time) => {
     // `${dayjs(day).format('YYYY-MM-DD')}T${time}:00`;
 
-    date = dayjs(day).format('YYYY-MM-DD');
-    dateTime = dayjs(`${date} ${time}`).toISOString();  // Change ISO 8601 Type for safari
+    const date = dayjs(day).format('YYYY-MM-DD');
+    const dateTime = dayjs(`${date} ${time}`).format('YYYY-MM-DDTHH:mm:ss');
 
     return dateTime;
 }
