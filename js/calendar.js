@@ -253,10 +253,11 @@ let loadCalendarParse = async (jsonString) => {
 }
 
 let dateTimeFormat = (day, time) => {
-    // `${dayjs(day).format('YYYY-MM-DD')}T${time}:00`;
+    // const dateTime = `${dayjs(day).format('YYYY-MM-DD')}T${time}`;
 
-    const date = dayjs(day).format('YYYY-MM-DD');
-    const dateTime = dayjs(`${date} ${time}`).format('YYYY-MM-DDTHH:mm:ss');
+    const formattedDay = day.replace(/. /g, "/");    // Change for safari date format
+    const dateTime = `${formattedDay}T${time}`;
+    const formattedDateTime = dayjs(dateTime).toISOString();
 
-    return dateTime;
+    return formattedDateTime;
 }
