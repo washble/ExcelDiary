@@ -1,7 +1,7 @@
 // need dayjs
 const today = dayjs();
 
-let userLocale = navigator.language || navigator.userLanguage;
+let userLocale = navigator.language || navigator.userLanguage || 'ko';
 dayjs.locale(userLocale);
 
 let calendarEl = document.getElementById('calendar');
@@ -156,7 +156,6 @@ let loadingErrorSpinning = () => {
 }
 
 let loadCalendar = async (startDate, endDate) => {
-    // Test : ?id=1KUlOegO2xx2_rYrIuPNgsuTFQnhk4ALSATyrdABSpXA&gid=1386834576
     const urlParams = new URLSearchParams(window.location.search);
     const id = getSpreadSheetId(urlParams);
     const gid = getSpreadSheetGid(urlParams);
@@ -231,14 +230,14 @@ let loadCalendarParse = async (jsonString) => {
         // Event settings
         let event = {};
 
-        event.start = `${dayjs(ligneC1).format('YYYY-MM-DD')}T${ligneC3}:00`;
+        event.start = dateTimeFormat(ligneC1, `${ligneC3}:00`);
         if(ligneC4 != null) {
             event.title = `${ligneC5} (${ligneC3}-${ligneC4})`;
-            event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:01`;
+            event.end = dateTimeFormat(ligneC2, `${ligneC4}:01`);
         } else {
             event.title = `${ligneC5} (${ligneC3})`;
             // No end time, using start time instead. 
-            event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC3}:01`;
+            event.end = dateTimeFormat(ligneC2, `${ligneC3}:01`);;
         }
 
         if(ligneC6) { event.url = ligneC6; }
@@ -251,4 +250,14 @@ let loadCalendarParse = async (jsonString) => {
     });
 
     return events;
+}
+
+let dateTimeFormat = (day, time) => {
+    // const dateTime = `${dayjs(day).format('YYYY-MM-DD')}T${time}`;
+
+    const formattedDay = day.replace(/. /g, "/");    // Change for safari date format
+    const dateTime = `${formattedDay}T${time}`;
+    const formattedDateTime = dayjs(dateTime).toISOString();
+
+    return formattedDateTime;
 }
