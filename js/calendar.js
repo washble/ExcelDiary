@@ -230,14 +230,14 @@ let loadCalendarParse = async (jsonString) => {
         // Event settings
         let event = {};
 
-        event.start = `${dayjs(ligneC1).format('YYYY-MM-DD')}T${ligneC3}:00`;
+        event.start = dateTimeFormat(ligneC1, `${ligneC3}:00`);
         if(ligneC4 != null) {
             event.title = `${ligneC5} (${ligneC3}-${ligneC4})`;
-            event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC4}:01`;
+            event.end = dateTimeFormat(ligneC2, `${ligneC4}:01`);
         } else {
             event.title = `${ligneC5} (${ligneC3})`;
             // No end time, using start time instead. 
-            event.end = `${dayjs(ligneC2).format('YYYY-MM-DD')}T${ligneC3}:01`;
+            event.end = dateTimeFormat(ligneC2, `${ligneC3}:01`);;
         }
 
         if(ligneC6) { event.url = ligneC6; }
@@ -250,4 +250,13 @@ let loadCalendarParse = async (jsonString) => {
     });
 
     return events;
+}
+
+let dateTimeFormat = (day, time) => {
+    // `${dayjs(day).format('YYYY-MM-DD')}T${time}:00`;
+
+    date = dayjs(day).format('YYYY-MM-DD');
+    dateTime = dayjs(`${date} ${time}`).toISOString();  // Change ISO 8601 Type for safari
+
+    return dateTime;
 }
