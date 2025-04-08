@@ -222,7 +222,7 @@ let loadCalendarParse = async (jsonString) => {
         const ligneC0 = ligneC[0].f ? ligneC[0].f : ligneC[0].v;
         const ligneC1 = ligneC[1].f ? ligneC[1].f : ligneC[1].v;
         const ligneC2 = ligneC[2].f ? ligneC[2].f : ligneC[2].v;
-        const ligneC3 = ligneC[3].f ? ligneC[3].f : ligneC[3].v;
+        const ligneC3 = ligneC[3] != null ? (ligneC[3].f ? ligneC[3].f : ligneC[3].v) : null;
         const ligneC4 = ligneC[4] != null ? (ligneC[4].f ? ligneC[4].f : ligneC[4].v) : null;
         const ligneC5 = ligneC[5].f ? ligneC[5].f : ligneC[5].v;
         const ligneC6 = ligneC[6].f ? ligneC[6].f : ligneC[6].v;
@@ -230,14 +230,25 @@ let loadCalendarParse = async (jsonString) => {
         // Event settings
         let event = {};
 
-        event.start = dateTimeFormat(ligneC1, `${ligneC3}:00`);
-        if(ligneC4 != null) {
-            event.title = `${ligneC5} (${ligneC3}-${ligneC4})`;
-            event.end = dateTimeFormat(ligneC2, `${ligneC4}:01`);
+        if(ligneC3 != null) {
+            // Start time exists
+            event.start = dateTimeFormat(ligneC1, `${ligneC3}:00`);
+            event.title = `${ligneC5} (${ligneC3}`;
+
+            if(ligneC4 != null) {
+                // Start and end times exist
+                event.end = dateTimeFormat(ligneC2, `${ligneC4}:01`);
+                event.title = titleStartEndFormat(ligneC5, ligneC3, ligneC4);
+            } else {
+                // No end time, using start time instead.
+                event.end = dateTimeFormat(ligneC2, `${ligneC3}:01`);
+                event.title = titleStartEndFormat(ligneC5, ligneC3);
+            }
         } else {
-            event.title = `${ligneC5} (${ligneC3})`;
-            // No end time, using start time instead. 
-            event.end = dateTimeFormat(ligneC2, `${ligneC3}:01`);;
+            // No start time; using default start and end times
+            event.start = dateTimeFormat(ligneC1, `00:00:00`);
+            event.end = dateTimeFormat(ligneC2, `00:00:01`);
+            event.title = `${ligneC5}`;
         }
 
         if(ligneC6) { event.url = ligneC6; }
@@ -250,6 +261,13 @@ let loadCalendarParse = async (jsonString) => {
     });
 
     return events;
+}
+
+let titleStartEndFormat = (title, startDate, endDate = null) => {
+    const formatTitle 
+        = endDate ? `${title} (${startDate} - ${endDate})` : `${title} (${startDate})`;
+
+    return formatTitle;
 }
 
 let dateTimeFormat = (day, time) => {
