@@ -126,6 +126,7 @@ const calendarSwipe = (calendar) => {
     let startX;
     const swipeSensitivity = Math.max(100, window.innerWidth * 0.15);
 
+    // Checking has scrollbar
     const hasScrollbar = () => {
         const hasHorizontalScrollbar = document.documentElement.scrollWidth > document.documentElement.clientWidth;
         const hasVerticalScrollbar = document.documentElement.scrollHeight > document.documentElement.clientHeight;
@@ -135,11 +136,12 @@ const calendarSwipe = (calendar) => {
 
     // Don't operation in mobile
     const isAtScreenEdge = () => {
-        const scrollX = window.scrollX;
+        let scrollX = window.scrollX;
 
         return scrollX < 5 || scrollX > window.innerWidth - 5;
     };
 
+    // Mobile Swipe
     calendarEl.addEventListener('touchstart', function(event) {
         startX = event.touches[0].clientX;
     });
@@ -150,6 +152,24 @@ const calendarSwipe = (calendar) => {
         if (hasScrollbar()) { return; }
         // if (hasScrollbar() && !isAtScreenEdge(startX)) { return; }
 
+        if (startX > endX + swipeSensitivity) {
+            calendar.next();
+        } else if (startX < endX - swipeSensitivity) {
+            calendar.prev();
+        }
+    });
+
+    // PC Swipe
+    calendarEl.addEventListener('mousedown', function(event) {
+        startX = event.clientX;
+    });
+    
+    calendarEl.addEventListener('mouseup', function(event) {
+        const endX = event.clientX;
+    
+        if (hasScrollbar()) { return; }
+        // if (hasScrollbar() && !isAtScreenEdge(startX)) { return; }
+    
         if (startX > endX + swipeSensitivity) {
             calendar.next();
         } else if (startX < endX - swipeSensitivity) {
