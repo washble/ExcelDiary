@@ -4,6 +4,7 @@ const today = dayjs();
 const userLocale = navigator.language || navigator.userLanguage || 'ko';
 dayjs.locale(userLocale);
 
+const containerEl = document.getElementById('calendar-container');
 const calendarEl = document.getElementById('calendar');
 const loadingSpinnerEl = document.getElementById('loading-spinner');
 const loadingErrorMessageEl = document.getElementById('error-message');
@@ -44,6 +45,9 @@ const calendarRender = async () => {
         displayEventTime: false, // Display event time
         locale: userLocale,   // Set language to Korean
         datesSet: async function(dateInfo) {
+            // Display none all tooltips
+            hideAllEventTooltip();
+
             // Date information when navigating to the previous or next month
             let startMonth = dayjs(dateInfo.startStr).format('YYYY-MM-DD');
             let endMonth = dayjs(dateInfo.endStr).format('YYYY-MM-DD');
@@ -52,8 +56,6 @@ const calendarRender = async () => {
 
             calendar.removeAllEvents();
             calendar.addEventSource(eventsResult);
-
-            hideAllEventTooltip();
         },
         eventClick: function(info) {
             if(!info.event.url) { return; }
@@ -123,13 +125,20 @@ const hideAllEventTooltip = () => {
 
 const calendarSwipe = (calendar) => {
     let startX;
+    const swipeSensitivity = Math.max(100, window.innerWidth * 0.15);
 
     const hasScrollbar = () => {
-        return calendarEl.scrollWidth > calendarEl.clientWidth;
+        const hasHorizontalScrollbar = document.documentElement.scrollWidth > document.documentElement.clientWidth;
+        const hasVerticalScrollbar = document.documentElement.scrollHeight > document.documentElement.clientHeight;
+        
+        return hasHorizontalScrollbar;
     };
 
-    const isAtScreenEdge = (x) => {
-        return x < 2 || x > window.innerWidth - 2;
+    // Don't operation in mobile
+    const isAtScreenEdge = () => {
+        const scrollX = window.scrollX;
+
+        return scrollX < 5 || scrollX > window.innerWidth - 5;
     };
 
     calendarEl.addEventListener('touchstart', function(event) {
@@ -137,13 +146,11 @@ const calendarSwipe = (calendar) => {
     });
 
     calendarEl.addEventListener('touchend', function(event) {
-        if(tooltipVisible) { return; }
-
         const endX = event.changedTouches[0].clientX;
-        const swipeSensitivity = Math.max(100, window.innerWidth * 0.15);
-
-        if (hasScrollbar() && !isAtScreenEdge(startX)) { return; }
         
+        if (hasScrollbar()) { return; }
+        // if (hasScrollbar() && !isAtScreenEdge(startX)) { return; }
+
         if (startX > endX + swipeSensitivity) {
             calendar.next();
         } else if (startX < endX - swipeSensitivity) {
