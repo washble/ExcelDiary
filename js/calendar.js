@@ -4,7 +4,6 @@ const today = dayjs();
 const userLocale = navigator.language || navigator.userLanguage || 'ko';
 dayjs.locale(userLocale);
 
-const containerEl = document.getElementById('calendar-container');
 const calendarEl = document.getElementById('calendar');
 const loadingSpinnerEl = document.getElementById('loading-spinner');
 const loadingErrorMessageEl = document.getElementById('error-message');
