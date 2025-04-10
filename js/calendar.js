@@ -1,18 +1,18 @@
 // need dayjs
 const today = dayjs();
 
-let userLocale = navigator.language || navigator.userLanguage || 'ko';
+const userLocale = navigator.language || navigator.userLanguage || 'ko';
 dayjs.locale(userLocale);
 
-let calendarEl = document.getElementById('calendar');
-let loadingSpinnerEl = document.getElementById('loading-spinner');
-let loadingErrorMessageEl = document.getElementById('error-message');
+const calendarEl = document.getElementById('calendar');
+const loadingSpinnerEl = document.getElementById('loading-spinner');
+const loadingErrorMessageEl = document.getElementById('error-message');
 
 document.addEventListener('DOMContentLoaded', async function() {
     await calendarRender();
 });
 
-let calendarRender = async () => {
+const calendarRender = async () => {
     let calendar = new FullCalendar.Calendar(calendarEl, {
         headerToolbar: {
         // left: 'prevYear,prev,next,nextYear today',
@@ -52,6 +52,8 @@ let calendarRender = async () => {
 
             calendar.removeAllEvents();
             calendar.addEventSource(eventsResult);
+
+            hideAllEventTooltip();
         },
         eventClick: function(info) {
             if(!info.event.url) { return; }
@@ -60,25 +62,7 @@ let calendarRender = async () => {
             info.jsEvent.preventDefault();
         },
         eventDidMount: function(info) {
-            const tooltip = document.createElement('div');
-            tooltip.innerHTML = info.event.title;
-            tooltip.className = 'tooltip';
-
-            // Set the background color of the tooltip based on the event's background color
-            tooltip.style.backgroundColor = info.event.backgroundColor || 'rgba(55, 136, 216, 0.9)'; // Default value
-
-            document.body.appendChild(tooltip);
-
-            info.el.addEventListener('mouseenter', function() {
-                tooltip.style.display = 'block';
-                const rect = info.el.getBoundingClientRect();
-                tooltip.style.left = rect.left + 'px';
-                tooltip.style.top = (rect.top + rect.height + 10) + 'px'; // Position 10px below
-            });
-
-            info.el.addEventListener('mouseleave', function() {
-                tooltip.style.display = 'none';
-            });
+            eventTooltip(info);
         },
         // events: [
         //     {
@@ -105,33 +89,95 @@ let calendarRender = async () => {
     });
 
     calendar.render();
+    calendarSwipe(calendar);
 }
 
-let getSpreadSheetId = (urlParams) => {
+const eventTooltip = (info) => {
+    const tooltip = document.createElement('div');
+    tooltip.innerHTML = info.event.title;
+    tooltip.className = 'tooltip';
+
+    // Set the background color of the tooltip based on the event's background color
+    tooltip.style.backgroundColor = info.event.backgroundColor || 'rgba(55, 136, 216, 0.9)'; // Default value
+
+    document.body.appendChild(tooltip);
+
+    info.el.addEventListener('mouseenter', function() {
+        tooltip.style.display = 'block';
+        const rect = info.el.getBoundingClientRect();
+        tooltip.style.left = rect.left + 'px';
+        tooltip.style.top = (rect.top + rect.height + 5) + 'px'; // Position 10px below
+    });
+
+    info.el.addEventListener('mouseleave', function() {
+        tooltip.style.display = 'none';
+    });
+}
+
+const hideAllEventTooltip = () => {
+    const existingTooltips = document.getElementsByClassName('tooltip');
+    for (let i = 0; i < existingTooltips.length; i++) {
+        existingTooltips[i].style.display = 'none';
+    }
+}
+
+const calendarSwipe = (calendar) => {
+    let startX;
+    let tooltipVisible = false;
+
+    calendarEl.addEventListener('touchstart', function(event) {
+        tooltipVisible = false;
+        const existingTooltips = document.getElementsByClassName('tooltip');
+        for (let i = 0; i < existingTooltips.length; i++) {
+            if (existingTooltips[i].style.display === 'block') {
+                tooltipVisible = true;
+                break;
+            }
+        }
+        if (tooltipVisible) { return; }
+
+        startX = event.touches[0].clientX;
+    });
+
+    calendarEl.addEventListener('touchend', function(event) {
+        if(tooltipVisible) { return; }
+
+        const endX = event.changedTouches[0].clientX;
+        const swipeSensitivity = Math.max(100, window.innerWidth * 0.15);
+
+        if (startX > endX + swipeSensitivity) {
+            calendar.next();
+        } else if (startX < endX - swipeSensitivity) {
+            calendar.prev();
+        }
+    });
+}
+
+const getSpreadSheetId = (urlParams) => {
     const id = urlParams.get('id');
 
     return id;
 }
 
-let getSpreadSheetGid = (urlParams) => {
+const getSpreadSheetGid = (urlParams) => {
     const gid = urlParams.get('gid');
 
     return gid;
 }
 
-let loadingSpinnerPosition = () => {
+const loadingSpinnerPosition = () => {
     loadingSpinnerEl.style.top = `${calendarEl.offsetHeight * 0.5}px`;
     loadingSpinnerEl.style.left = `${calendarEl.offsetWidth * 0.5}px`;
     loadingSpinnerEl.style.transform = 'translate(-50%, -50%)';
 }
 
-let loadingErrorMessagePosition = () => {
+const loadingErrorMessagePosition = () => {
     loadingErrorMessageEl.style.top = `${calendarEl.offsetHeight * 0.5}px`;
     loadingErrorMessageEl.style.left = `${calendarEl.offsetWidth * 0.5}px`;
     loadingErrorMessageEl.style.transform = 'translate(-50%, -50%)';
 }
 
-let loadingSpinning = () => {
+const loadingSpinning = () => {
     // Show loading spinner
     loadingSpinnerPosition();
     loadingSpinnerEl.style.display = 'block';
@@ -140,12 +186,12 @@ let loadingSpinning = () => {
     loadingErrorMessageEl.style.display = 'none';
 }
 
-let loadingSuccessSpinning = () => {
+const loadingSuccessSpinning = () => {
     // Hide loading spinner
     loadingSpinnerEl.style.display = 'none';
 }
 
-let loadingErrorSpinning = () => {
+const loadingErrorSpinning = () => {
     // Hide loading spinner
     loadingSpinnerEl.style.display = 'none';
 
@@ -155,7 +201,7 @@ let loadingErrorSpinning = () => {
     loadingErrorMessageEl.style.display = 'block';
 }
 
-let loadCalendar = async (startDate, endDate) => {
+const loadCalendar = async (startDate, endDate) => {
     const urlParams = new URLSearchParams(window.location.search);
     const id = getSpreadSheetId(urlParams);
     const gid = getSpreadSheetGid(urlParams);
@@ -210,7 +256,7 @@ let loadCalendar = async (startDate, endDate) => {
     }
 }
 
-let loadCalendarParse = async (jsonString) => {
+const loadCalendarParse = async (jsonString) => {
     const json = JSON.parse(jsonString);
 
     let events = [];
@@ -263,14 +309,14 @@ let loadCalendarParse = async (jsonString) => {
     return events;
 }
 
-let titleStartEndFormat = (title, startDate, endDate = null) => {
+const titleStartEndFormat = (title, startDate, endDate = null) => {
     const formatTitle 
         = endDate ? `${title} (${startDate} - ${endDate})` : `${title} (${startDate})`;
 
     return formatTitle;
 }
 
-let dateTimeFormat = (day, time) => {
+const dateTimeFormat = (day, time) => {
     // const dateTime = `${dayjs(day).format('YYYY-MM-DD')}T${time}`;
 
     const formattedDay = day.replace(/. /g, "/");    // Change for safari date format
