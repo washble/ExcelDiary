@@ -124,7 +124,8 @@ const hideAllEventTooltip = () => {
 
 const calendarSwipe = (calendar) => {
     let startX;
-    const swipeSensitivity = Math.max(100, window.innerWidth * 0.15);
+    console.log(window.innerWidth * 0.15)
+    const swipeSensitivity = Math.max(120, window.innerWidth * 0.15);
 
     // Checking has scrollbar
     const hasScrollbar = () => {
