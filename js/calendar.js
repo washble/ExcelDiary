@@ -123,19 +123,16 @@ const hideAllEventTooltip = () => {
 
 const calendarSwipe = (calendar) => {
     let startX;
-    let tooltipVisible = false;
+
+    const hasScrollbar = () => {
+        return calendarEl.scrollWidth > calendarEl.clientWidth;
+    };
+
+    const isAtScreenEdge = (x) => {
+        return x < 2 || x > window.innerWidth - 2;
+    };
 
     calendarEl.addEventListener('touchstart', function(event) {
-        tooltipVisible = false;
-        const existingTooltips = document.getElementsByClassName('tooltip');
-        for (let i = 0; i < existingTooltips.length; i++) {
-            if (existingTooltips[i].style.display === 'block') {
-                tooltipVisible = true;
-                break;
-            }
-        }
-        if (tooltipVisible) { return; }
-
         startX = event.touches[0].clientX;
     });
 
@@ -145,6 +142,8 @@ const calendarSwipe = (calendar) => {
         const endX = event.changedTouches[0].clientX;
         const swipeSensitivity = Math.max(100, window.innerWidth * 0.15);
 
+        if (hasScrollbar() && !isAtScreenEdge(startX)) { return; }
+        
         if (startX > endX + swipeSensitivity) {
             calendar.next();
         } else if (startX < endX - swipeSensitivity) {
