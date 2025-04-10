@@ -149,7 +149,7 @@ const calendarSwipe = (calendar) => {
     calendarEl.addEventListener('touchend', function(event) {
         const endX = event.changedTouches[0].clientX;
         
-        if (hasScrollbar()) { return; }
+        // if (hasScrollbar()) { return; }
         // if (hasScrollbar() && !isAtScreenEdge(startX)) { return; }
 
         if (startX > endX + swipeSensitivity) {
@@ -167,7 +167,7 @@ const calendarSwipe = (calendar) => {
     calendarEl.addEventListener('mouseup', function(event) {
         const endX = event.clientX;
     
-        if (hasScrollbar()) { return; }
+        // if (hasScrollbar()) { return; }
         // if (hasScrollbar() && !isAtScreenEdge(startX)) { return; }
     
         if (startX > endX + swipeSensitivity) {
