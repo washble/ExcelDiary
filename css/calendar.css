@@ -67,13 +67,7 @@
 /* Calendar tooltip */
 
 /* Calendar loading */
-.spinner {
-    border: 8px solid #f3f3f3; /* Background color */
-    border-top: 8px solid #3498db; /* Spinner color */
-    border-radius: 50%;
-    width: 50px; /* Spinner width */
-    height: 50px; /* Spinner height */
-    animation: spin 1s linear infinite; /* Rotation animation */
+.spinner-container {
     position: absolute; /* Set to absolute position */
     top: 50%; /* Position from the top at 50% */
     left: 50%; /* Position from the left at 50% */
@@ -81,18 +75,27 @@
     z-index: 9999; /* Display above other elements */
 }
 
+.spinner {
+    border: 8px solid #f3f3f3; /* Background color */
+    border-top: 8px solid #3498db; /* Spinner color */
+    border-radius: 50%;
+    width: 50px; /* Spinner width */
+    height: 50px; /* Spinner height */
+    animation: spin 1s linear infinite; /* Rotation animation */
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-#error-message {
+.error-message {
     position: absolute; /* Set to absolute position */
-    color: red;
     top: 50%; /* Position from the top at 50% */
     left: 50%; /* Position from the left at 50% */
     transform: translate(-50%, -50%); /* Center alignment both horizontally and vertically */
     z-index: 9998; /* Display above other elements but below the spinner */
+    color: red;
     text-align: center; /* Center align the text */
 }
 /* Calendar loading */

@@ -191,21 +191,8 @@ const getSpreadSheetGid = (urlParams) => {
     return gid;
 }
 
-const loadingSpinnerPosition = () => {
-    loadingSpinnerEl.style.top = `${calendarEl.offsetHeight * 0.5}px`;
-    loadingSpinnerEl.style.left = `${calendarEl.offsetWidth * 0.5}px`;
-    loadingSpinnerEl.style.transform = 'translate(-50%, -50%)';
-}
-
-const loadingErrorMessagePosition = () => {
-    loadingErrorMessageEl.style.top = `${calendarEl.offsetHeight * 0.5}px`;
-    loadingErrorMessageEl.style.left = `${calendarEl.offsetWidth * 0.5}px`;
-    loadingErrorMessageEl.style.transform = 'translate(-50%, -50%)';
-}
-
 const loadingSpinning = () => {
     // Show loading spinner
-    loadingSpinnerPosition();
     loadingSpinnerEl.style.display = 'block';
 
     // Hide error massage
@@ -222,7 +209,6 @@ const loadingErrorSpinning = () => {
     loadingSpinnerEl.style.display = 'none';
 
     // Show loadingErrorMessage
-    loadingErrorMessagePosition();
     loadingErrorMessageEl.innerText = 'Failed to load.\n Please retry.';
     loadingErrorMessageEl.style.display = 'block';
 }
